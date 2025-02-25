@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Bot, Keyboard } = require('grammy');
+const { Bot, Keyboard, InlineKeyboard } = require('grammy');
 require('dotenv').config({ path: './src/.env' });
 
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -24,9 +24,15 @@ bot.command('start', async (ctx) => {
     });
     
 
-    bot.hears('HTML', async (ctx) => {
-        await ctx.reply('Какой тег используется для создания ссылки?');
+    bot.hears(['HTML', 'CSS', 'JavaScript', 'React'], async (ctx) => {
+        const inlineKeyboard = new InlineKeyboard()
+        .text('Получить ответ', 'getAnswer')
+        .text('Отменить', 'cancel');
+        
+        await ctx.reply(`Что такое ${ctx.message.text}?`, {
+        reply_markup: inlineKeyboard,
         });
+        });        
         
 // Обработка ошибок
 bot.catch((err) => {
